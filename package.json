@@ -1,0 +1,69 @@
+{
+  "name": "@carv/testing-library",
+  "version": "0.1.0",
+  "private": true,
+  "homepage": "https://github.com/carvjs/testing-library",
+  "bugs": "https://github.com/carvjs/testing-library/issues",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/carvjs/testing-library.git"
+  },
+  "author": "Sascha Tandel <s.tandel@kenoxa.de>",
+  "scripts": {
+    "build": "nps build",
+    "format": "nps format",
+    "prepublishOnly": "echo 'Use `npm start release` instead of `npm publish`!' && exit 1",
+    "release": "nps release",
+    "start": "nps",
+    "test": "nps test"
+  },
+  "prettier": "@carv/prettier-config",
+  "eslintConfig": {
+    "extends": "@carv/eslint-config",
+    "root": true
+  },
+  "jest": {
+    "preset": "@carv/snowpack-scripts"
+  },
+  "dependencies": {
+    "@testing-library/dom": "^7.0.3",
+    "@testing-library/svelte": "^3.0.0",
+    "@testing-library/user-event": "^12.0.11",
+    "@urql/core": "^1.12.1",
+    "@urql/svelte": "^0.3.0",
+    "is-promise": "^4.0.0",
+    "svelte-htm": "^1.1.0",
+    "wonka": "^4.0.14"
+  },
+  "devDependencies": {
+    "@carv/eslint-config": "^1.2.2",
+    "@carv/prettier-config": "^1.0.2",
+    "@carv/runtime": "^0.2.3",
+    "@carv/snowpack-scripts": "^1.3.6",
+    "@carv/types": "^1.1.0",
+    "doctoc": "^1.4.0",
+    "envinfo": "^7.5.1",
+    "eslint": "^7.3.1",
+    "fake-tag": "^2.0.0",
+    "graphql": "^15.2.0",
+    "jest": "^26.1.0",
+    "nps": "^5.9.12",
+    "prettier": "^2.0.5",
+    "snowpack": "^2.5.0",
+    "svelte": "^3.21.0",
+    "svelte-check": "^0.1.37",
+    "ts-graphql-plugin": "^1.12.0",
+    "typescript": "^3.9.5"
+  },
+  "peerDependencies": {
+    "@carv/runtime": "^0.2.3",
+    "graphql": "^15.2.0",
+    "svelte": "^3.21.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "snowpack": {
+    "extends": "@carv/snowpack-scripts"
+  }
+}
