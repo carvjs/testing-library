@@ -35,7 +35,7 @@ Formats all sources using prettier.
 2. `npm run format`
 3. `npm test`
 4. git commit -a -m "chore: prepare release`
-5. [npm version [<newversion> | major | minor | patch] -m "chore: release"](https://docs.npmjs.com/cli/version)
+5. [npm version [\<newversion> | major | minor | patch] -m "chore: release"](https://docs.npmjs.com/cli/version)
 6. `npm run release`
 
 ## Folder Structure
