@@ -7,6 +7,8 @@ export * from './utils/render'
 export * from '@testing-library/dom'
 export { screen, fireEvent, act, cleanup } from '@testing-library/svelte'
 export type { RenderResult, RenderOptions, FireFunction, FireObject } from '@testing-library/svelte'
-export * from '@testing-library/user-event'
+export { default as userEvent } from '@testing-library/user-event'
+
 export { default as html } from 'svelte-htm'
+
 export * from 'wonka'
