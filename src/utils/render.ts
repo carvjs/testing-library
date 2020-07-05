@@ -7,19 +7,19 @@ import type { MockedIdentityHub } from '../types'
 import MockRuntimeProvider from '../components/mock-provider.svelte'
 
 export interface ComponentOptions {
-  props?: Record<string, unknown>
-  hub?: MockedIdentityHub
   extensionPoints?: Record<string, string | Loader>
+  hub?: MockedIdentityHub
+  props?: Record<string, unknown>
 }
 
 export function render(
   component: typeof SvelteComponent,
-  { hub, extensionPoints, props: args }: ComponentOptions = {},
+  { hub, extensionPoints, props }: ComponentOptions = {},
   renderOptions?: Omit<lib.RenderOptions, 'queries'>,
 ): lib.RenderResult {
   return lib.render(
     MockRuntimeProvider,
-    { props: { component, extensionPoints, hub, args } },
+    { props: { component, hub, extensionPoints, props } },
     renderOptions,
   )
 }

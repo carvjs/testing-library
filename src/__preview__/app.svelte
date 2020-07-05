@@ -32,3 +32,7 @@
     {/if}
   </ExtensionPoint>
 {/if}
+
+<style src="./app.css">
+
+</style>
