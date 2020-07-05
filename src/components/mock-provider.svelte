@@ -8,7 +8,7 @@
   export let hub: Partial<MockedIdentityHub> | undefined = undefined
   export let extensionPoints: Record<string, string | Loader> | undefined | null = undefined
   export let component: typeof SvelteComponent | undefined = undefined
-  export let args: Record<string, unknown> | undefined = undefined
+  export let props: Record<string, unknown> | undefined = undefined
 
   const { addExtensionPoints } = initMockRuntime({ hub })
 
@@ -19,7 +19,7 @@
 </script>
 
 {#if component}
-  <svelte:component this={component} {...$$restProps} {...args} />
+  <svelte:component this={component} {...$$restProps} {...props} />
 {:else}
   <slot />
 {/if}
