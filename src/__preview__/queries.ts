@@ -1,4 +1,4 @@
-import gql from 'fake-tag'
+import { gql } from '@carv/runtime'
 
 import type { FetchMe } from './__generated__/fetch-me'
 

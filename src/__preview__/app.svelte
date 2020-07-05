@@ -1,29 +1,28 @@
 <script lang="typescript">
-  import type { CombinedError } from '@urql/core'
-  import { getContext } from 'svelte'
+  import { Delay, ExtensionPoint, query } from '@carv/runtime'
+
+  import favicon from './favicon.png'
 
   import * as q from './queries'
 
-  const { hub, ExtensionPoint } = getContext('@carv/runtime')
+  const fetchMe = query<q.FetchMe>(q.fetchMe)
 
-  const fetchMe = hub.query<q.FetchMe>(q.fetchMe)
-
-  let error: CombinedError | undefined
+  let error: Error | undefined
   $: error = $fetchMe.error
 
-  let data: q.FetchMe | undefined
-  $: data = $fetchMe.data
-
   let me: q.FetchMe['me'] | undefined | null
-  $: me = data && data.me
+  $: me = $fetchMe.data?.me
 </script>
 
 <svelte:head>
   <title>Runtime Preview</title>
+  <link rel="icon" type="image/png" href={favicon} />
 </svelte:head>
 
 {#if $fetchMe.fetching}
-  <ExtensionPoint id="loading" variant="small">Loading...</ExtensionPoint>
+  <Delay>
+    <ExtensionPoint id="loading" variant="small">Loading...</ExtensionPoint>
+  </Delay>
 {:else if error}
   <ExtensionPoint id="error" {error}>Oh no! {error.message}</ExtensionPoint>
 {:else}
