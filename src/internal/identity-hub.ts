@@ -6,11 +6,10 @@ import {
   OperationContext,
   PromisifiedSource,
   OperationType,
+  Client,
 } from '@urql/core'
-import { initClient, query, mutate, subscription } from '@urql/svelte'
 import isPromise from 'is-promise'
-
-import type { IdentityHub } from '@carv/runtime'
+import { getContext } from 'svelte'
 
 import type { MockedIdentityHub, MockedResult } from '../types'
 
@@ -48,7 +47,7 @@ const toResult = (
     result = fail(error)
   }
 
-  if (result === undefined) result = fail(`hub.${type}() is not mocked`)
+  if (result === undefined) result = fail(`${type}() is not mocked`)
 
   if (typeof result !== 'function') {
     result = isPromise(result) ? fromPromise(result) : fromValue(result)
@@ -59,7 +58,7 @@ const toResult = (
   return withPromise(
     map(
       (
-        operationResult: MockedResult = fail(`hub.${type}() mock did return undefined`),
+        operationResult: MockedResult = fail(`${type}() mock did return undefined`),
       ): OperationResult => ({
         operation: {
           key,
@@ -75,8 +74,11 @@ const toResult = (
   )
 }
 
-export function initMockIdentityHub(hub: MockedIdentityHub = {}): IdentityHub {
-  const client = initClient({ url: 'http://identity-hub.local' })
+// Same as https://github.com/FormidableLabs/urql/blob/main/packages/svelte-urql/src/context.ts#L4
+const CLIENT = '$$_URQL'
+
+export function initMockIdentityHub(hub: MockedIdentityHub = {}): void {
+  const client = getContext(CLIENT) as Client
 
   Object.assign(client, {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -100,38 +102,32 @@ export function initMockIdentityHub(hub: MockedIdentityHub = {}): IdentityHub {
           }),
       ),
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    mutate: <Data = any, Variables extends Record<string, unknown> = Record<string, unknown>>(
-      query: DocumentNode | string,
-      variables?: Variables,
-      context?: Partial<OperationContext>,
-    ): Source<OperationResult<Data>> =>
-      toResult(
-        'mutate',
-        query,
-        variables,
-        context,
-        () => hub.mutate && hub.mutate(query, { variables, context }),
-      ),
+    // // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // mutate: <Data = any, Variables extends Record<string, unknown> = Record<string, unknown>>(
+    //   query: DocumentNode | string,
+    //   variables?: Variables,
+    //   context?: Partial<OperationContext>,
+    // ): Source<OperationResult<Data>> =>
+    //   toResult(
+    //     'mutate',
+    //     query,
+    //     variables,
+    //     context,
+    //     () => hub.mutate && hub.mutate(query, { variables, context }),
+    //   ),
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    subscribe: <Data = any, Variables extends Record<string, unknown> = Record<string, unknown>>(
-      query: DocumentNode | string,
-      variables?: Variables,
-      context?: Partial<OperationContext>,
-    ): Source<OperationResult<Data>> =>
-      toResult(
-        'subscribe',
-        query,
-        variables,
-        context,
-        () => hub.subscribe && hub.subscribe(query, { variables, context }),
-      ),
+    // // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // subscribe: <Data = any, Variables extends Record<string, unknown> = Record<string, unknown>>(
+    //   query: DocumentNode | string,
+    //   variables?: Variables,
+    //   context?: Partial<OperationContext>,
+    // ): Source<OperationResult<Data>> =>
+    //   toResult(
+    //     'subscribe',
+    //     query,
+    //     variables,
+    //     context,
+    //     () => hub.subscribe && hub.subscribe(query, { variables, context }),
+    //   ),
   })
-
-  return {
-    query: (gql, args) => query({ ...args, query: gql }),
-    mutate: (gql, args) => mutate({ ...args, query: gql }),
-    subscribe: (gql, { handler, ...args } = {}) => subscription({ ...args, query: gql }, handler),
-  }
 }

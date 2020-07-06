@@ -1,6 +1,7 @@
 <script lang="typescript">
-  import type { SvelteComponent } from 'svelte/internal'
+  import type { SvelteComponent } from 'svelte'
   import type { Loader } from '@carv/runtime'
+  import { addExtensionPoints } from '@carv/runtime'
 
   import type { MockedIdentityHub } from '../types'
   import { initMockRuntime } from '../services/runtime'
@@ -10,7 +11,7 @@
   export let component: typeof SvelteComponent | undefined = undefined
   export let props: Record<string, unknown> | undefined = undefined
 
-  const { addExtensionPoints } = initMockRuntime({ hub })
+  initMockRuntime({ hub })
 
   // This should be reactive. But svelte-check fails.
   if (extensionPoints) {
