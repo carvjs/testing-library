@@ -1,6 +1,6 @@
 {
   "name": "@carv/testing-library",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "private": true,
   "homepage": "https://github.com/carvjs/testing-library",
   "bugs": "https://github.com/carvjs/testing-library/issues",
