@@ -1,9 +1,8 @@
-import { DocumentNode, parse } from 'graphql'
+import { parse } from 'graphql'
 import { fromValue, fromPromise, map, Source, toPromise, take } from 'wonka'
 import {
   CombinedError,
   OperationResult,
-  OperationContext,
   PromisifiedSource,
   OperationType,
   Client,
@@ -32,22 +31,17 @@ const TYPE_TO_OPERATION_NAME: { [key: string]: OperationType } = {
   subscribe: 'subscription',
 }
 
-const toResult = (
-  type: 'query' | 'mutate' | 'subscribe',
-  query: string | DocumentNode,
-  variables: Record<string, unknown> | undefined,
-  context: Partial<OperationContext> | undefined,
-  callback: () => MockedResult | undefined,
-  // eslint-disable-next-line max-params
-): PromisifiedSource => {
+const mock = <T extends 'query'>(hub: MockedIdentityHub, type: T): Client[T] => (
+  query,
+  variables,
+  context,
+) => {
   let result
   try {
-    result = callback()
+    result = hub[type]?.(query, variables, context) ?? fail(`${type}() is not mocked`)
   } catch (error) {
     result = fail(error)
   }
-
-  if (result === undefined) result = fail(`${type}() is not mocked`)
 
   if (typeof result !== 'function') {
     result = isPromise(result) ? fromPromise(result) : fromValue(result)
@@ -66,7 +60,7 @@ const toResult = (
           operationName: TYPE_TO_OPERATION_NAME[type],
           query: typeof query === 'string' ? parse(query) : query,
           variables,
-          context: { url: 'mock', requestPolicy: 'network-only', ...context },
+          context: { url: 'http://local.mock', requestPolicy: 'network-only', ...context },
         },
         ...operationResult,
       }),
@@ -81,26 +75,7 @@ export function initMockIdentityHub(hub: MockedIdentityHub = {}): void {
   const client = getContext(CLIENT) as Client
 
   Object.assign(client, {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    query: <Data = any, Variables extends Record<string, unknown> = Record<string, unknown>>(
-      query: DocumentNode | string,
-      variables?: Variables,
-      context: Partial<OperationContext> = {},
-    ): Source<OperationResult<Data>> =>
-      toResult(
-        'query',
-        query,
-        variables,
-        context,
-        () =>
-          hub.query &&
-          hub.query(query, {
-            variables,
-            requestPolicy: context.requestPolicy || 'network-only',
-            pollInterval: context.pollInterval,
-            context,
-          }),
-      ),
+    query: mock(hub, 'query'),
 
     // // eslint-disable-next-line @typescript-eslint/no-explicit-any
     // mutate: <Data = any, Variables extends Record<string, unknown> = Record<string, unknown>>(
