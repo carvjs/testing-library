@@ -1,11 +1,11 @@
 <script lang="typescript">
-  import { Delay, ExtensionPoint, query } from '@carv/runtime'
+  import { Delay, ExtensionPoint, useQuery } from '@carv/runtime'
 
   import favicon from './favicon.png'
 
   import * as q from './queries'
 
-  const fetchMe = query<q.FetchMe>(q.fetchMe)
+  const fetchMe = useQuery<q.FetchMe>(q.fetchMe)
 
   let error: Error | undefined
   $: error = $fetchMe.error

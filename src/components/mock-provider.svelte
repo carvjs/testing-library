@@ -3,15 +3,15 @@
   import type { Loader } from '@carv/runtime'
   import { addExtensionPoints } from '@carv/runtime'
 
-  import type { MockedIdentityHub } from '../types'
+  import type { MockedRequest } from '../types'
   import { initMockRuntime } from '../services/runtime'
 
-  export let hub: Partial<MockedIdentityHub> | undefined = undefined
+  export let request: MockedRequest | undefined = undefined
   export let extensionPoints: Record<string, string | Loader> | undefined | null = undefined
   export let component: typeof SvelteComponent | undefined = undefined
   export let props: Record<string, unknown> | undefined = undefined
 
-  initMockRuntime({ hub })
+  initMockRuntime({ request })
 
   // This should be reactive. But svelte-check fails.
   if (extensionPoints) {

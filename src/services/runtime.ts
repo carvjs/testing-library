@@ -1,9 +1,9 @@
 import { initRuntime } from '@carv/runtime'
 
-import type { MockedIdentityHub } from '../types'
-import { initMockIdentityHub } from '../internal/identity-hub'
+import type { MockedRequest } from '../types'
+import { initMockedGraphQLClient } from '../internal/graphql'
 
-export function initMockRuntime({ hub }: { hub?: MockedIdentityHub } = {}): void {
+export function initMockRuntime({ request }: { request?: MockedRequest } = {}): void {
   initRuntime()
-  initMockIdentityHub(hub)
+  initMockedGraphQLClient(request)
 }

@@ -19,5 +19,3 @@ export type { RenderResult, RenderOptions, FireFunction, FireObject } from '@tes
 export { default as userEvent } from '@testing-library/user-event'
 
 export { default as html } from 'svelte-htm'
-
-export * from 'wonka'

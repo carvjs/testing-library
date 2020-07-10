@@ -1,32 +1,23 @@
+import { GraphQLError, GraphQLExtensions, GraphQLRequestOptions } from '@carv/runtime'
+
 /**
- * This export is required for snowpack to include this file in the output.
+ * This is required for snowpack to include this file in the output.
  */
-export default void 0 // eslint-disable-line no-void
+const MAKE_SNOWPACK_HAPPY = undefined // eslint-disable-line @typescript-eslint/no-unused-vars
 
-import type { Source } from 'wonka'
-import type { OperationResult, OperationContext } from '@urql/core'
-import type { DocumentNode } from 'graphql'
+/* eslint-disable @typescript-eslint/no-explicit-any */
+export type MaybePromise<T> = T | Promise<T>
+export type MockedResult<T = any> = MaybePromise<MockedResponse<T>>
 
-export type MaybeSource<T> = T | Source<T> | Promise<T>
-export type MockedResult = MaybeSource<Omit<OperationResult, 'operation'>>
-
-export interface MockedIdentityHub {
-  query?: <V extends Record<string, unknown> = Record<string, unknown>>(
-    gql: string | DocumentNode,
-    variables?: Partial<V>,
-    context?: Partial<OperationContext>,
-  ) => MockedResult | undefined
-
-  // Mutate?: <V extends Record<string, unknown> = Record<string, unknown>>(
-  //   mutation: MutationArguments<V>['query'],
-  //   args?: Omit<MutationArguments<V>, 'query'>,
-  // ) => MockedResult | undefined
-
-  // subscribe?: <V extends Record<string, unknown> = Record<string, unknown>>(
-  //   mutation: SubscriptionArguments<V>['query'],
-  //   args?: Omit<SubscriptionArguments<V>, 'query'> & {
-  //     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  //     handler?: SubscriptionHandler<any, any> | undefined
-  //   },
-  // ) => MockedResult | undefined
+export interface MockedResponse<T = any> {
+  readonly data?: T
+  readonly errors?: GraphQLError[]
+  readonly extensions?: GraphQLExtensions
 }
+
+export type MockedRequest<T = any, V extends Record<string, any> = Record<string, any>> = (
+  gql: string,
+  variables: V,
+  options: GraphQLRequestOptions,
+) => MockedResult<T> | undefined
+/* eslint-enable @typescript-eslint/no-explicit-any */
